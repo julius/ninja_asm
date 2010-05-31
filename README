@@ -1,0 +1,43 @@
+= Ninja ASM
+Ninja ASM gives your assembler code Macros. Its pretty sneaky.
+
+== Why?
+At university we have to use ASM language for SPIM (a MIPS simulator).
+It has no preprocessor. Ninja ASM is there to give all those Registers meaningful names.
+
+== Example
+mycode.ninja.asm:
+
+    {ITERATOR=$s0}
+    {MAX=$s1}
+    {RESULT=$2}
+    li {ITERATOR}, 0
+    li {MAX}, 5
+    li {RESULT}, 10
+  loop: 
+    mul {RESULT}, {RESULT}, {ITERATOR}
+
+    add {ITERATOR}, {ITERATOR}, 1
+    bgt {MAX}, {ITERATOR}, loop
+
+ruby ninja_asm.rb mycode.ninja.asm > mycode.asm:
+
+    li $s0, 0
+    li $s1, 5
+    li $2, 10
+  loop: 
+    mul $2, $2, $s0
+
+    add $s0, $s0, 1
+    bgt $s1, $s0, loop
+
+== More advanced stuff
+Well, there are also multiline macros. Checkout for a real SPIM example:
+  example/aufgabe1.ninja.asm
+
+To compile ninja code to normal ASM code and run it in SPIM:
+  ruby ninja_asm.rb mycode.ninja.asm > mycode.asm && spim -f mycode.asm
+
+== TODO
+Ninja leaves a mess of whitespace lines. So he is more like a pirate.
+
